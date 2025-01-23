@@ -23,8 +23,8 @@ const scene = new THREE.Scene();
 /*
  * Overlay
  */
-const overlayGeometry = new THREE.PlaneGeometry(1, 1, 1);
-const overlayMaterial = new THREE.MeshDistanceMaterial({ color: "black" });
+const overlayGeometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+const overlayMaterial = new THREE.ShaderMaterial();
 const overlayMesh = new THREE.Mesh(overlayGeometry, overlayMaterial);
 scene.add(overlayMesh);
 /**

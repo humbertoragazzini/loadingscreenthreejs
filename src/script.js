@@ -25,6 +25,7 @@ const scene = new THREE.Scene();
  */
 const overlayGeometry = new THREE.PlaneGeometry(1, 1, 1, 1);
 const overlayMaterial = new THREE.ShaderMaterial({
+    wireframe: true,
     vertexShader: `
         void main(){
             gl_Position = vec4(position, 0.5);

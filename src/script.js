@@ -23,17 +23,22 @@ const scene = new THREE.Scene();
 /*
  * Overlay
  */
-const overlayGeometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+const overlayGeometry = new THREE.PlaneGeometry(2, 2, 1, 1);
 const overlayMaterial = new THREE.ShaderMaterial({
-    wireframe: true,
+    wireframe: false,
+    transparent: true,
+    uniforms: {
+        uAlpha: { value: 0.5 },
+    },
     vertexShader: `
         void main(){
-            gl_Position = vec4(position, 0.5);
+            gl_Position = vec4(position, 1.0);
         }
     `,
     fragmentShader: `
+        uniform float uAlpha;
         void main(){
-            gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+            gl_FragColor = vec4(0.0,0.0,0.0,uAlpha);
         }
     `,
 });

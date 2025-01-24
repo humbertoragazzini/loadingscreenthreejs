@@ -1,16 +1,33 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-
+import { gsap } from "gsap";
 /**
  * Loaders
  */
-const gltfLoader = new GLTFLoader();
-const cubeTextureLoader = new THREE.CubeTextureLoader();
+let progress = 0;
+const loadingManager = new THREE.LoadingManager(
+    () => {
+        console.log("loading");
+        gsap.to(overlayMesh.material.uniforms.uAlpha, {
+            value: 0.0,
+            duration: 3,
+        });
+    },
+    () => {
+        console.log(progress);
+        progress++;
+        loadingBarMesh.material.uniforms.uAlpha.value = progress / 23;
+    }
+);
+// Loaders
+const gltfLoader = new GLTFLoader(loadingManager);
+const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
 
 /**
  * Base
  */
+
 // Debug
 const debugObject = {};
 
@@ -28,7 +45,7 @@ const overlayMaterial = new THREE.ShaderMaterial({
     wireframe: false,
     transparent: true,
     uniforms: {
-        uAlpha: { value: 0.5 },
+        uAlpha: { value: 1 },
     },
     vertexShader: `
         void main(){
@@ -38,12 +55,41 @@ const overlayMaterial = new THREE.ShaderMaterial({
     fragmentShader: `
         uniform float uAlpha;
         void main(){
-            gl_FragColor = vec4(0.0,0.0,0.0,uAlpha);
+            gl_FragColor = vec4(1.0,0.0,0.0,uAlpha);
         }
     `,
 });
 const overlayMesh = new THREE.Mesh(overlayGeometry, overlayMaterial);
+const loadingBarGeometry = new THREE.PlaneGeometry(1, 0.15, 10, 10);
+const loadingBarShader = new THREE.ShaderMaterial({
+    wireframe: false,
+    transparent: true,
+    uniforms: {
+        uAlpha: { value: 1.0 },
+    },
+    vertexShader: `
+        varying vec2 vUv;
+        void main(){
+            gl_Position = vec4(position, 1.0);
+            vUv=uv;      
+        }
+    `,
+    fragmentShader: `
+        uniform float uAlpha;
+        varying vec2 vUv;
+        void main(){
+            float fill = smoothstep(uAlpha-0.02, uAlpha, vUv.x);
+            gl_FragColor = vec4(1.0,0.0,1.0,1.0-fill);
+        }
+    `,
+});
+const loadingBarMesh = new THREE.Mesh(loadingBarGeometry, loadingBarShader);
 scene.add(overlayMesh);
+scene.add(loadingBarMesh);
+/**
+ * Update all materials
+ */
+
 /**
  * Update all materials
  */

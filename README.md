@@ -1,6 +1,6 @@
 # LoadingScreenThreeJS MiniProject - Humberto Ragazzini
 
-This is a simple example of how to make a simple loading screen applied with THREEJS: [LoadingScreenThreeJS](https://humbertoragazzini.github.io/loadingscreenthreejs/dist/)
+This is a simple example of how to make a simple loading screen applied with THREEJS i have added a function with a settimeout just to emulate a really slow connection: [LoadingScreenThreeJS](https://humbertoragazzini.github.io/loadingscreenthreejs/dist/)
 
 # **Frameworks and Tecnologies**
 

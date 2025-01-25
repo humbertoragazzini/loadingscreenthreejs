@@ -15,11 +15,16 @@ const loadingManager = new THREE.LoadingManager(
         });
     },
     () => {
-        console.log(progress);
         progress++;
-        loadingBarMesh.material.uniforms.uAlpha.value = progress / 23;
+        addProgress(progress);
     }
 );
+const addProgress = (progress) => {
+    const step = setTimeout(() => {
+        console.log(progress);
+        loadingBarMesh.material.uniforms.uAlpha.value = progress / 23;
+    }, 1000 * progress);
+};
 // Loaders
 const gltfLoader = new GLTFLoader(loadingManager);
 const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
